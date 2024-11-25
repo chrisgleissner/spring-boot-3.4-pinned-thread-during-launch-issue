@@ -1,6 +1,5 @@
 name: build
-on:
-  on: [ push ]
+on: [ push ]
 
 jobs:
   build:
@@ -23,7 +22,7 @@ jobs:
           distribution: corretto
           cache: 'gradle'
 
-      - name: Start and stop Spring Boot
+      - name: Start Spring Boot ${{ matrix.spring-boot-version }}
         run: |
           ./gradlew bootRun -DspringBootVersion=${{ matrix.spring-boot-version }} & \
           until curl --output /dev/null --silent --head --fail http://localhost:8080/actuator/health; do sleep 0.01; done;
