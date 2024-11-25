@@ -1,6 +1,9 @@
 spring:
   main:
     lazy-initialization: true
+  mvc:
+    servlet:
+      load-on-startup: 0 # Work-around for Virtual Thread pinning issue as described in https://github.com/spring-projects/spring-framework/issues/33958
   threads:
     virtual:
       enabled: true
