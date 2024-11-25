@@ -1,0 +1,29 @@
+name: build
+on:
+  on: [ push ]
+
+jobs:
+  build:
+
+    strategy:
+      fail-fast: false
+      matrix:
+        spring-boot-version: [ 3.3.6, 3.4.0 ]
+
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: 21
+          distribution: corretto
+          cache: 'gradle'
+
+      - name: Start and stop Spring Boot
+        run: |
+          ./gradlew bootRun -DspringBootVersion=${{ matrix.spring-boot-version }} & \
+          until curl --output /dev/null --silent --head --fail http://localhost:8080/actuator/health; do sleep 0.01; done;
